@@ -1,0 +1,131 @@
+{
+  "name": "tailwind-canonical-fixer",
+  "displayName": "Tailwind CSS Canonical & Arbitrary Fixer",
+  "description": "Automatically convert arbitrary pixel values and legacy syntax into modern Tailwind CSS canonical classes.",
+  "version": "1.0.2",
+  "publisher": "developer",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Formatters",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:html",
+    "onLanguage:vue",
+    "onLanguage:svelte",
+    "onLanguage:astro"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tailwindFixer.fixCurrentFile",
+        "title": "Tailwind Fixer: Fix All Canonical Issues in Current File"
+      },
+      {
+        "command": "tailwindFixer.fixWorkspace",
+        "title": "Tailwind Fixer: Fix Entire Workspace"
+      }
+    ],
+    "configuration": {
+      "title": "Tailwind Canonical Fixer",
+      "properties": {
+        "tailwindFixer.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Eklentinin tüm analiz ve düzeltme yeteneklerini aktif/pasif yapar."
+        },
+        "tailwindFixer.tailwindVersion": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "v4",
+            "v3"
+          ],
+          "default": "auto",
+          "description": "Hedef Tailwind CSS sürümü. 'auto' seçildiğinde proje yapılandırmasından (tailwind.config / package.json) otomatik algılanır."
+        },
+        "tailwindFixer.diagnosticSeverity": {
+          "type": "string",
+          "enum": [
+            "information",
+            "hint",
+            "warning"
+          ],
+          "default": "information",
+          "description": "Sorunlar (Problems) panelinde gösterilecek teşhis seviyesi. 'hint' seçildiğinde ampul menüsü ve hızlı düzeltmeler çalışmaya devam eder ancak Problems panelinde kalabalık oluşturmaz."
+        },
+        "tailwindFixer.onlyActiveDocument": {
+          "type": "boolean",
+          "default": false,
+          "description": "Yalnızca aktif olarak açık olan ve üzerinde çalışılan editör sekmesindeki sorunları listeler (Problems panelinin kalabalıklaşmasını önler)."
+        },
+        "tailwindFixer.autoSaveOnWorkspaceFix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tüm workspace düzeltildiğinde dosyaları otomatik diske kaydeder ve geçici açılan sekmeleri kapatır."
+        },
+        "tailwindFixer.convertArbitraryPx": {
+          "type": "boolean",
+          "default": true,
+          "description": "4'e tam bölünen keyfi piksel değerlerini (örn: min-w-[500px] -> min-w-125, w-[16px] -> w-4) dönüştürür."
+        },
+        "tailwindFixer.convertBorderRadius": {
+          "type": "boolean",
+          "default": true,
+          "description": "Keyfi köşe yarıçapı değerlerini (örn: rounded-[32px] -> rounded-4xl) dönüştürür."
+        },
+        "tailwindFixer.convertV4Canonicals": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tailwind v4 kanonik sınıflarını (bg-linear, stroke-3, leading-0, z-0 vb.) dönüştürür."
+        },
+        "tailwindFixer.convertShadowSmToXs": {
+          "type": "boolean",
+          "default": false,
+          "description": "Tailwind v3'ten v4'e geçerken 'shadow-sm' sınıflarını 'shadow-xs' olarak dönüştürür (shadow-sm geçerli bir sınıf olduğu için varsayılan: false)."
+        },
+        "tailwindFixer.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/.next/**",
+            "**/.turbo/**",
+            "**/.nuxt/**",
+            "**/.output/**",
+            "**/dist/**",
+            "**/dist-ssr/**",
+            "**/build/**",
+            "**/out/**",
+            "**/coverage/**",
+            "**/.git/**"
+          ],
+          "description": "Taramalarda, teşhislerde ve toplu düzeltmelerde hariç tutulacak dosya kalıpları."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "test": "node out/test/test-runner.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.3.3"
+  }
+}
